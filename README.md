@@ -213,5 +213,93 @@ The backend uses:
 - **Pydantic** - Data validation
 - **CORS Middleware** - Cross-origin request handling
 
+## Detection Logic
 
+The system uses heuristic-based behavioral analysis instead of naive rules.
+
+### Loop Detection
+
+Detects repeated behavior patterns using:
+
+Consecutive identical actions
+Dominant action ratio
+
+Heuristics:
+
+≥ 3 consecutive identical actions → loop
+Dominant action > 80% of total steps → loop
+
+### Drift Detection
+
+Detects changes in agent intent over time.
+
+Approach:
+
+Compare early vs late inputs
+Extract keyword intent (e.g., summarize, code, execute)
+Detect semantic shift in task direction
+
+### Failure Detection
+
+Detects instability and repeated failures.
+
+Heuristics:
+
+≥ 3 consecutive failures
+Failure rate > 50%
+
+### Metrics Computed
+
+Per session:
+
+Total steps
+Success vs failure rate
+Action distribution
+
+## Design Decisions
+
+### Data Storage Choice
+
+Used: In-memory storage (Python dictionary)
+
+Reasoning:
+
+Fast to implement
+No setup overhead
+Sufficient for prototype/demo
+
+Trade-off:
+
+Not persistent
+Not scalable
+
+### Real-time vs Batch Processing
+
+Used: On-demand processing
+
+Events are stored immediately
+Detection is computed when session is queried
+
+Trade-off:
+
+Simpler architecture
+Slight delay in insights vs true streaming systems
+
+### Detection Thresholds & Reasoning
+
+Thresholds were chosen to balance:
+
+Avoiding false positives
+Detecting meaningful patterns
+
+Examples:
+
+Loop threshold (80%) prevents misclassifying drift as loop
+Failure threshold (50%) captures instability without noise
+
+## Trade-offs (Due to Time Constraints)
+Used heuristic rules instead of ML/NLP models
+Simplified drift detection using keyword matching
+In-memory storage instead of database
+Minimal UI instead of full-featured dashboard
 
