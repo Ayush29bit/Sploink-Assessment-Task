@@ -220,9 +220,10 @@ The system uses heuristic-based behavioral analysis instead of naive rules.
 ### Loop Detection
 
 Detects repeated behavior patterns using:
-
+```
 Consecutive identical actions
 Dominant action ratio
+```
 
 Heuristics:
 
